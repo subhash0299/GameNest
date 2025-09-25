@@ -8,9 +8,11 @@ import MastermindGame from './components/MastermindGame';  // Add this import
 import DiceGame from './components/DiceGame';
 import RockPaperScissors from './components/RockPaperScissors';
 import SimonSays from './components/SimonSays';
+import ReactionTime from './components/ReactionTime';
+import FlagGame from './components/FlagGame';
 import { ArrowLeft } from 'lucide-react';
 
-type GameType = 'menu' | 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind' | 'dicegame' | 'rps' | 'simon';  // Add mastermind
+type GameType = 'menu' | 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind' | 'dicegame' | 'rps' | 'simon' | 'reaction' | 'flag';  // Add mastermind
 
 function App() {
   const [currentGame, setCurrentGame] = useState<GameType>('menu');
@@ -37,6 +39,10 @@ function App() {
         return <RockPaperScissors />;
       case 'simon':
         return <SimonSays />;
+      case 'reaction':
+        return <ReactionTime />;
+      case 'flag':
+        return <FlagGame />;
       
       default:
         return <GameMenu onSelectGame={setCurrentGame} />;

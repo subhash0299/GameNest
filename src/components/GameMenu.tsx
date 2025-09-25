@@ -1,7 +1,7 @@
 import React from 'react';
-import { Brain, Target, Calculator, Shuffle, DicesIcon, Swords, Music } from 'lucide-react';
+import { Brain, Target, Calculator, Shuffle, DicesIcon, Swords, Music, Timer, Flag } from 'lucide-react';
 
-type GameType = 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind' | 'dicegame' | 'rps' | 'sudoku' | 'simon';
+type GameType = 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind' | 'dicegame' | 'rps' | 'sudoku' | 'simon' | 'reaction' | 'flag';
 
 interface GameMenuProps {
   onSelectGame: (game: GameType) => void;
@@ -71,6 +71,22 @@ const games = [
     icon: Music,
     color: 'from-violet-500 to-violet-600',
     hoverColor: 'hover:from-violet-600 hover:to-violet-700'
+  },
+  {
+    id: 'reaction' as GameType,
+    title: 'Reaction Time',
+    description: 'Test your reflexes - click when the screen turns green',
+    icon: Timer,
+    color: 'from-emerald-500 to-emerald-600',
+    hoverColor: 'hover:from-emerald-600 hover:to-emerald-700'
+  },
+  {
+    id: 'flag' as GameType,
+    title: 'Guess the Flag',
+    description: 'Test your geography knowledge with flag identification',
+    icon: Flag,
+    color: 'from-rose-500 to-rose-600',
+    hoverColor: 'hover:from-rose-600 hover:to-rose-700'
   }
 ];
 

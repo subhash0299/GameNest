@@ -11,6 +11,8 @@ function DiceGame() {
   const [gameStarted, setGameStarted] = useState(false);
   const [diceValue, setDiceValue] = useState<number | null>(null);
   const [winner, setWinner] = useState<string | null>(null);
+  const [isRolling, setIsRolling] = useState(false);
+  const [displayNumber, setDisplayNumber] = useState<number | null>(null);
 
   // Start game with names
   const startGame = (names: string[]) => {
@@ -24,15 +26,30 @@ function DiceGame() {
   };
 
   const rollDice = () => {
+    if (isRolling) return;
+    
+    setIsRolling(true);
     const roll = Math.floor(Math.random() * 6) + 1;
-    setDiceValue(roll);
+    
+    // Start the rolling animation
+    const rollInterval = setInterval(() => {
+      setDisplayNumber(Math.floor(Math.random() * 6) + 1);
+    }, 100);
 
-    if (roll === 1) {
-      setCurrentTurnScore(0);
-      nextPlayer();
-    } else {
-      setCurrentTurnScore(prev => prev + roll);
-    }
+    // Stop the animation and show final result after 1 second
+    setTimeout(() => {
+      clearInterval(rollInterval);
+      setDisplayNumber(roll);
+      setDiceValue(roll);
+      setIsRolling(false);
+
+      if (roll === 1) {
+        setCurrentTurnScore(0);
+        nextPlayer();
+      } else {
+        setCurrentTurnScore(prev => prev + roll);
+      }
+    }, 1000);
   };
 
   const holdTurn = () => {
@@ -143,9 +160,13 @@ function DiceGame() {
       </div>
 
       {/* Dice result */}
-      {diceValue && (
+      {(displayNumber || diceValue) && (
         <div className="text-center mb-6">
-          <p className="text-xl">You rolled: <span className="font-bold">{diceValue}</span></p>
+          <p className="text-xl">
+            You rolled: <span className={`font-bold ${isRolling ? 'text-gray-400' : ''}`}>
+              {isRolling ? displayNumber : diceValue}
+            </span>
+          </p>
         </div>
       )}
 

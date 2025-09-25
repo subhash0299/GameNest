@@ -1,7 +1,7 @@
 import React from 'react';
-import { Brain, Target, Calculator, Shuffle } from 'lucide-react';
+import { Brain, Target, Calculator, Shuffle, DicesIcon, Swords, Music } from 'lucide-react';
 
-type GameType = 'spelling' | 'number' | 'math' | 'scramble';
+type GameType = 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind' | 'dicegame' | 'rps' | 'sudoku' | 'simon';
 
 interface GameMenuProps {
   onSelectGame: (game: GameType) => void;
@@ -47,6 +47,30 @@ const games = [
     icon: Brain,
     color: 'from-red-500 to-red-600',
     hoverColor: 'hover:from-red-600 hover:to-red-700'
+  },
+    {
+    id: 'dicegame' as GameType,
+    title: 'Dice Game',
+    description: 'Roll dice and compete with friends to reach 50 points',
+    icon: DicesIcon,
+    color: 'from-pink-500 to-pink-600',
+    hoverColor: 'hover:from-pink-600 hover:to-pink-700'
+  },
+  {
+    id: 'rps' as GameType,
+    title: 'Rock Paper Scissors',
+    description: 'Challenge the computer in this classic game',
+    icon: Swords,
+    color: 'from-cyan-500 to-cyan-600',
+    hoverColor: 'hover:from-cyan-600 hover:to-cyan-700'
+  },
+  {
+    id: 'simon' as GameType,
+    title: 'Simon Says',
+    description: 'Test your memory by repeating the color sequence',
+    icon: Music,
+    color: 'from-violet-500 to-violet-600',
+    hoverColor: 'hover:from-violet-600 hover:to-violet-700'
   }
 ];
 

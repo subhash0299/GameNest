@@ -5,9 +5,12 @@ import NumberGuessingGame from './components/NumberGuessingGame';
 import MathQuizGame from './components/MathQuizGame';
 import WordScrambleGame from './components/WordScrambleGame';
 import MastermindGame from './components/MastermindGame';  // Add this import
+import DiceGame from './components/DiceGame';
+import RockPaperScissors from './components/RockPaperScissors';
+import SimonSays from './components/SimonSays';
 import { ArrowLeft } from 'lucide-react';
 
-type GameType = 'menu' | 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind';  // Add mastermind
+type GameType = 'menu' | 'spelling' | 'number' | 'math' | 'scramble' | 'mastermind' | 'dicegame' | 'rps' | 'simon';  // Add mastermind
 
 function App() {
   const [currentGame, setCurrentGame] = useState<GameType>('menu');
@@ -28,6 +31,13 @@ function App() {
         return <WordScrambleGame />;
       case 'mastermind':
         return <MastermindGame />;  // Add this case
+      case 'dicegame':
+        return <DiceGame />;
+      case 'rps':
+        return <RockPaperScissors />;
+      case 'simon':
+        return <SimonSays />;
+      
       default:
         return <GameMenu onSelectGame={setCurrentGame} />;
     }

@@ -133,6 +133,7 @@ function FlagGame() {
   const [flagLoadError, setFlagLoadError] = useState(false);
   const [timeLeft, setTimeLeft] = useState(GAME_DURATION);
   const [isGameActive, setIsGameActive] = useState(false);
+  const [isImageLoading, setIsImageLoading] = useState(false);
 
   useEffect(() => {
     fetchCountries();
@@ -183,6 +184,19 @@ function FlagGame() {
     }
   };
 
+  const handleImageLoad = () => {
+    setIsImageLoading(false);
+  };
+
+  const handleImageError = () => {
+    setFlagLoadError(true);
+    setIsImageLoading(false);
+    setTimeout(() => {
+      generateNewRound(countries);
+      setFlagLoadError(false);
+    }, 1000);
+  };
+
   const generateNewRound = (availableCountries: Country[]) => {
     const shuffled = [...availableCountries].sort(() => Math.random() - 0.5);
     const correctCountry = shuffled[0];
@@ -190,6 +204,7 @@ function FlagGame() {
     const allOptions = [...wrongOptions, correctCountry]
       .sort(() => Math.random() - 0.5);
 
+    setIsImageLoading(true);
     setCurrentFlag(correctCountry);
     setOptions(allOptions);
     setHasAnswered(false);
@@ -222,14 +237,6 @@ function FlagGame() {
     }, 1000);
   };
 
-  const handleImageError = () => {
-    setFlagLoadError(true);
-    setTimeout(() => {
-      generateNewRound(countries);
-      setFlagLoadError(false);
-    }, 1000);
-  };
-
   if (isLoading) {
     return (
       <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8 text-center">
@@ -239,70 +246,76 @@ function FlagGame() {
   }
 
   return (
-    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-8">
-      <div className="text-center mb-8">
-        <h2 className="text-3xl font-bold mb-4">Guess the Flag</h2>
+    <div className="max-w-md mx-auto bg-white rounded-2xl shadow-xl p-4">
+      <div className="text-center mb-4">
+        <h2 className="text-2xl font-bold mb-2">Guess the Flag</h2>
         {error && (
-          <div className="text-yellow-600 bg-yellow-50 p-2 rounded-lg mb-4 flex items-center justify-center gap-2">
-            <AlertCircle size={16} />
+          <div className="text-yellow-600 bg-yellow-50 p-1.5 rounded-lg mb-2 flex items-center justify-center gap-2 text-sm">
+            <AlertCircle size={14} />
             {error}
           </div>
         )}
-        <div className="flex justify-between items-center mb-4">
-          <div className="text-lg">Score: {score}</div>
-          <div className={`text-lg font-bold ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : ''}`}>
-            Time: {timeLeft}s
+        <div className="flex justify-between items-center text-sm">
+          <div>Score: {score}</div>
+          <div className={`font-bold ${timeLeft <= 10 ? 'text-red-500 animate-pulse' : ''}`}>
+            {timeLeft}s
           </div>
-          <div className="text-lg">Best: {highScore}</div>
+          <div>Best: {highScore}</div>
         </div>
       </div>
 
       {!isGameActive && !isLoading ? (
         <div className="text-center">
           {timeLeft === 0 ? (
-            <div className="mb-8">
-              <h3 className="text-2xl font-bold mb-2">Time's Up!</h3>
-              <p className="text-lg">Final Score: {score}</p>
+            <div className="mb-4">
+              <h3 className="text-xl font-bold mb-1">Time's Up!</h3>
+              <p>Final Score: {score}</p>
               {score > highScore && (
-                <p className="text-green-500 font-bold mt-2">New High Score!</p>
+                <p className="text-green-500 font-bold text-sm mt-1">New High Score!</p>
               )}
             </div>
           ) : (
-            <div className="mb-8">
-              <h3 className="text-xl mb-4">Guess as many flags as you can in {GAME_DURATION} seconds!</h3>
+            <div className="mb-4">
+              <h3 className="text-base mb-2">Guess as many flags as you can in {GAME_DURATION} seconds!</h3>
             </div>
           )}
           <button
             onClick={startGame}
-            className="w-full py-3 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
+            className="w-full py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 flex items-center justify-center gap-2"
           >
-            <Timer size={20} />
+            <Timer size={18} />
             {timeLeft === 0 ? 'Play Again' : 'Start Game'}
           </button>
         </div>
       ) : (
         <>
           {currentFlag && (
-            <div className="mb-8">
+            <div className="mb-4 relative">
+              {isImageLoading && (
+                <div className="absolute inset-0 flex items-center justify-center bg-gray-100 rounded-lg">
+                  <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-500"></div>
+                </div>
+              )}
               <img
                 src={`https://flagcdn.com/w320/${currentFlag.code}.png`}
                 alt="Flag to guess"
-                className={`w-full h-56 md:h-64 object-contain rounded-lg shadow-md transition-opacity duration-300 ${
-                  flagLoadError ? 'opacity-0' : 'opacity-100'
+                className={`w-full h-40 object-contain rounded-lg shadow-md transition-all duration-300 ${
+                  flagLoadError || isImageLoading ? 'opacity-0' : 'opacity-100'
                 }`}
+                onLoad={handleImageLoad}
                 onError={handleImageError}
               />
             </div>
           )}
 
-          <div className="grid gap-4">
-            {options.map((country) => (
+          <div className="grid gap-2">
+            {!isImageLoading && options.map((country) => (
               <button
                 key={country.code}
                 onClick={() => handleGuess(country.name)}
                 disabled={hasAnswered}
                 className={`
-                  p-4 rounded-lg text-center text-lg font-medium transition-all
+                  py-2 px-4 rounded-lg text-center font-medium transition-all text-base
                   ${hasAnswered 
                     ? country.name === currentFlag?.name
                       ? 'bg-green-500 text-white'
@@ -317,13 +330,13 @@ function FlagGame() {
             ))}
           </div>
 
-          {isGameActive && (
+          {isGameActive && !isImageLoading && (
             <button
               onClick={startGame}
-              className="mt-8 w-full py-3 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center gap-2"
+              className="mt-4 w-full py-2 bg-gray-100 hover:bg-gray-200 rounded-lg flex items-center justify-center gap-2 text-sm"
             >
-              <RotateCcw size={20} />
-              Restart Game
+              <RotateCcw size={16} />
+              Restart
             </button>
           )}
         </>

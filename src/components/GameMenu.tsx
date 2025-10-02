@@ -141,7 +141,7 @@ function GameMenu({ onSelectGame }: GameMenuProps) {
         })}
       </div>
 
-      {/* Creator Footer 
+      {/* Creator Footer */}
       <footer className="mt-16 border-t pt-8 pb-4">
         <div className="flex flex-col items-center gap-4">
           <img 
@@ -191,7 +191,7 @@ function GameMenu({ onSelectGame }: GameMenuProps) {
           © {new Date().getFullYear()} Game Nest. All rights reserved.
         </p>
       </footer>
-      */}
+      
     </div>
   );
 }

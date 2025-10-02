@@ -2,8 +2,8 @@ import React, { useState, useEffect } from "react";
 import { RotateCcw, Info } from "lucide-react";
 import clsx from "clsx";
 
-const COLORS = ["red", "blue", "green", "yellow", "purple", "orange"];
-const CODE_LENGTH = 4;
+const COLORS = ["red", "blue", "green", "yellow", "purple", "orange", "pink", "teal"];
+const CODE_LENGTH = 5;
 
 function MastermindGame() {
   const [secretCode, setSecretCode] = useState<string[]>([]);
@@ -95,14 +95,14 @@ function MastermindGame() {
       {/* Instructions Modal */}
       {showInstructions && (
         <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50 p-4">
-          <div className="bg-white rounded-xl p-6 max-w-md text-left shadow-lg max-h-[90vh] flex flex-col">
+          <div className="bg-white rounded-xl p-6 max-w-lg text-left shadow-lg max-h-[90vh] flex flex-col">
             <h3 className="text-xl font-bold mb-4 sticky top-0 bg-white">How to Play Mastermind</h3>
             
             <div className="space-y-4 overflow-y-auto pr-2 custom-scrollbar">
               <section>
                 <h4 className="font-bold text-lg text-blue-600 mb-2">Game Objective</h4>
                 <p className="text-gray-700 mb-2">
-                  Crack the secret color code in as few attempts as possible. The code consists of {CODE_LENGTH} colors, and colors can be repeated.
+                  Crack the secret color code in as few attempts as possible. The code consists of {CODE_LENGTH} colors, chosen from {COLORS.length} different colors. Colors can be repeated.
                 </p>
               </section>
 
@@ -152,7 +152,7 @@ function MastermindGame() {
       )}
 
       {/* Color selection */}
-      <div className="grid grid-cols-6 gap-2 mb-6">
+      <div className="grid grid-cols-8 gap-2 mb-6">
         {COLORS.map((color) => (
           <div
             key={color}
